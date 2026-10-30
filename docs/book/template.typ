@@ -164,52 +164,72 @@
 }
 
 // Chapter opener: a stage number, a title and a tagline.
-#let chapter(num: none, title: "", tagline: none) = {
-  pagebreak(weak: true)
-  v(2.2cm)
-  if num != none {
-    text(font: head-font, size: 12pt, weight: "medium", fill: luma(120), tracking: 0.15em)[#upper(num)]
-    v(0.2cm)
-  }
-  heading(level: 1, title)
-  v(-0.5cm)
-  if tagline != none {
-    block(width: 85%)[
-      #set text(font: body-font, style: "italic", size: 11.5pt, fill: luma(90))
-      #tagline
-    ]
-    v(0.6cm)
+#let chapter(num: none, title: "", tagline: none) = context {
+  if target() == "html" {
+    html.elem("hr", attrs: (class: "chapter-break"))
+    if num != none { html.elem("p", attrs: (class: "stage"), upper(num)) }
+    heading(level: 1, title)
+    if tagline != none { html.elem("p", attrs: (class: "tagline"), tagline) }
+  } else {
+    pagebreak(weak: true)
+    v(2.2cm)
+    if num != none {
+      text(font: head-font, size: 12pt, weight: "medium", fill: luma(120), tracking: 0.15em)[#upper(num)]
+      v(0.2cm)
+    }
+    heading(level: 1, title)
+    v(-0.5cm)
+    if tagline != none {
+      block(width: 85%)[
+        #set text(font: body-font, style: "italic", size: 11.5pt, fill: luma(90))
+        #tagline
+      ]
+      v(0.6cm)
+    }
   }
 }
 
 // Callout boxes
-#let callout(title, color, body) = block(
-  width: 100%,
-  fill: color.lighten(90%),
-  stroke: (left: 3pt + color),
-  inset: (x: 12pt, y: 9pt),
-  radius: 2pt,
-  breakable: true,
-  above: 1.1em,
-  below: 1.1em,
-)[
-  #text(font: head-font, weight: "semibold", size: 9.5pt, fill: color.darken(20%))[#title]
-  #v(0.25em)
-  #set text(size: 9.8pt)
-  #body
-]
+#let callout(title, color, kind, body) = context {
+  if target() == "html" {
+    html.elem("aside", attrs: (class: "callout " + kind))[
+      #html.elem("p", attrs: (class: "callout-title"), title)
+      #body
+    ]
+  } else {
+    block(
+      width: 100%,
+      fill: color.lighten(90%),
+      stroke: (left: 3pt + color),
+      inset: (x: 12pt, y: 9pt),
+      radius: 2pt,
+      breakable: true,
+      above: 1.1em,
+      below: 1.1em,
+    )[
+      #text(font: head-font, weight: "semibold", size: 9.5pt, fill: color.darken(20%))[#title]
+      #v(0.25em)
+      #set text(size: 9.8pt)
+      #body
+    ]
+  }
+}
 
-#let note(body) = callout("Note", accent, body)
-#let wild(body) = callout("In the wild", accent-3, body)
-#let bill(body) = callout("The bill", accent-2, body)
-#let tryit(body) = callout("Try it yourself", accent-4, body)
-#let takeaway(body) = callout("Takeaways", ink, body)
+#let note(body) = callout("Note", accent, "note", body)
+#let wild(body) = callout("In the wild", accent-3, "wild", body)
+#let bill(body) = callout("The bill", accent-2, "bill", body)
+#let tryit(body) = callout("Try it yourself", accent-4, "tryit", body)
+#let takeaway(body) = callout("Takeaways", ink, "takeaway", body)
 
 // A caption-like label under a listing or output.
-#let src(path) = {
-  v(-0.6em)
-  align(right, text(font: head-font, size: 8pt, fill: luma(120))[#path])
-  v(0.2em)
+#let src(path) = context {
+  if target() == "html" {
+    html.elem("p", attrs: (class: "src"), path)
+  } else {
+    v(-0.6em)
+    align(right, text(font: head-font, size: 8pt, fill: luma(120))[#path])
+    v(0.2em)
+  }
 }
 
 // Program output rendered as a terminal-like block.
@@ -226,16 +246,31 @@
 ]
 
 // Expression/result table, the native rendering of what Report.kv prints.
-#let results(..rows) = table(
-  // long expressions get half the width, otherwise the first column takes what it needs
-  columns: if rows.pos().map(r => r.at(0).len()).fold(0, calc.max) > 48 { (1fr, 1fr) } else { (auto, 1fr) },
-  align: (left, left),
-  [Expression], [Result],
-  ..rows.pos().map(r => (
-    text(font: code-font, size: 8.4pt, r.at(0)),
-    text(font: code-font, size: 8.4pt, r.at(1)),
-  )).flatten()
-)
+#let results(..rows) = context {
+  if target() == "html" {
+    html.elem("table", attrs: (class: "results"))[
+      #html.elem("thead")[#html.elem("tr")[#html.elem("th")[Expression]#html.elem("th")[Result]]]
+      #html.elem("tbody")[
+        #for r in rows.pos() {
+          html.elem("tr")[#html.elem("td")[#html.elem("code", r.at(0))]#html.elem("td")[#html.elem("code", r.at(1))]]
+        }
+      ]
+    ]
+  } else {
+    table(
+      // long expressions get half the width, otherwise the first column takes what it needs
+      columns: if rows.pos().map(r => r.at(0).len()).fold(0, calc.max) > 48 { (1fr, 1fr) } else { (auto, 1fr) },
+      align: (left, left),
+      [Expression], [Result],
+      ..rows.pos().map(r => (
+        text(font: code-font, size: 8.4pt, r.at(0)),
+        text(font: code-font, size: 8.4pt, r.at(1)),
+      )).flatten()
+    )
+  }
+}
 
 // Monospace text without the inline-code box, for table cells.
-#let m(s) = text(font: code-font, size: 8.4pt, s)
+#let m(s) = context {
+  if target() == "html" { html.elem("code", s) } else { text(font: code-font, size: 8.4pt, s) }
+}

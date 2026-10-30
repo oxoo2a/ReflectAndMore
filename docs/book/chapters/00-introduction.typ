@@ -73,7 +73,7 @@ That is all there is. Three constructors of three visibilities, a private field,
 == The book in one picture
 
 #figure(
-  cover-art(),
+  context if target() == "html" { image("../assets/figure-candidate.svg", width: 100%) } else { cover-art() },
   caption: [`Candidate` on a mirror. Above the line, the class as the compiler sees it; in the reflection, the private members lit up. The badges are the annotations of stage 03 waiting to be attached; the dashed cards behind are the generated classes of stages 04 and 07.],
 )
 

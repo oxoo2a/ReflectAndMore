@@ -18,7 +18,10 @@ Pure JDK 25, no third-party dependencies.
 
 [docs/ReflectAndMore.pdf](docs/ReflectAndMore.pdf) is a textbook that walks through all stages in
 detail: an introduction, one chapter per stage and a conclusion, with the real program output
-quoted throughout. The source is in `docs/book/` (Typst); `docs/book/build.sh` rebuilds the PDF.
+quoted throughout. [docs/ReflectAndMore.epub](docs/ReflectAndMore.epub) is the same book for
+phones and e-readers. The source is in `docs/book/` (Typst); `docs/book/build.sh` rebuilds the
+PDF and `docs/book/build-epub.sh` the EPUB (both need [typst](https://typst.app); the EPUB build
+also needs Python with lxml and Pillow).
 
 ## Stages
 

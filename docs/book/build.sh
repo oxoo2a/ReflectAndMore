@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 
 tag=$(git describe --tags --abbrev=0 2>/dev/null || true)
 commit=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
-dirty=$(git status --porcelain --untracked-files=no -- .. 2>/dev/null | grep -v 'ReflectAndMore.pdf' | grep -q . && echo ", modified" || true)
+dirty=$(git status --porcelain --untracked-files=no -- .. 2>/dev/null | grep -v 'ReflectAndMore\.\(pdf\|epub\)' | grep -q . && echo ", modified" || true)
 if [[ -n "$tag" ]]; then
   version="Version $tag (commit $commit$dirty)"
 else
