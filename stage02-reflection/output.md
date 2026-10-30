@@ -121,7 +121,7 @@ _Java 25+37-LTS-jvmci-b01, Java HotSpot(TM) 64-Bit Server VM (Oracle Corporation
 | Call style               | ns per call |
 |--------------------------|-------------|
 | direct call              | 0.35        |
-| Method.invoke            | 6.27        |
-| MethodHandle.invokeExact | 2.37        |
+| Method.invoke            | 6.23        |
+| MethodHandle.invokeExact | 2.39        |
 
 > ℹ Numbers are indicative only (no proper benchmark harness). Since Java 18 Method.invoke is itself built on method handles (JEP 416); after warm-up the JIT removes most of the overhead for both.
