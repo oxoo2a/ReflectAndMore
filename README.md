@@ -74,6 +74,9 @@ tools/diff-stages.sh 03 05     # stage03 -> stage05
 
 ## Conventions
 
+The reasons behind the layout, the naming and the Markdown output are recorded in
+[docs/DECISIONS.md](docs/DECISIONS.md).
+
 - All stages use the same package `sa4e.reflect` and the same entry point `sa4e.reflect.Main`,
   so that diffs between stages show only the real change.
 - Every stage README follows the same rhythm: pain in the previous stage, mechanism, what real
