@@ -11,7 +11,7 @@
 #let ink = rgb("#1f2328")
 #let paper-gray = luma(246)
 
-#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", version: "", body) = {
+#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", version: "", art: none, body) = {
   set document(title: title, author: author)
   set page(
     paper: "a4",
@@ -87,22 +87,16 @@
   set enum(indent: 1em)
 
   // Title page
-  page(header: none, numbering: none, margin: (top: 5cm, bottom: 3cm, x: 3cm))[
+  page(header: none, numbering: none, margin: (top: 3.5cm, bottom: 2.5cm, x: 3cm))[
     #set text(font: head-font)
     #text(size: 11pt, fill: luma(110), tracking: 0.12em)[#upper(affiliation)]
-    #v(2.5cm)
+    #v(1.4cm)
     #text(size: 40pt, weight: "bold", fill: accent)[#title]
     #v(0.6cm)
     #text(size: 17pt, weight: "medium", fill: ink)[#subtitle]
     #v(1fr)
-    #block(width: 100%, inset: 0pt)[
-      #set text(font: code-font, size: 9pt, fill: luma(120))
-      ```
-      Candidate c = new Candidate(7);
-      // From here on, nothing about c is private any more.
-      ```
-    ]
-    #v(1.5cm)
+    #align(center)[#art]
+    #v(1fr)
     #text(size: 13pt, weight: "medium")[#author]
     #linebreak()
     #text(size: 10.5pt, fill: luma(100))[#date]

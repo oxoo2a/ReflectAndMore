@@ -1,4 +1,5 @@
 #import "template.typ": *
+#import "cover.typ": cover-art
 
 // Set by build.sh from git: --input version=... --input built=...
 #let version = sys.inputs.at("version", default: "unversioned build")
@@ -11,6 +12,7 @@
   affiliation: "Software Architectures for Enterprises · Universität Trier",
   date: "Inspired by a discussion with Peter Sturm · Winter term 2026/27",
   version: version + (if built != "" { " · built " + built } else { "" }),
+  art: cover-art(),
 )
 
 // Table of contents
