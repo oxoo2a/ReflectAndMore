@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.unitrier.sa4e</groupId>
+  <artifactId>reflect-and-more</artifactId>
+  <version>2026W</version>
+  <packaging>pom</packaging>
+
+  <name>ReflectAndMore</name>
+  <description>
+    Lecture material for "Software Architectures for Enterprises" (SA4E, Universität Trier):
+    one small program that grows stage by stage from plain Java to run-time type information,
+    reflection, annotations, dynamic proxies, dynamic class loading, inversion of control and
+    run-time code generation. Pure JDK, no third-party dependencies.
+  </description>
+
+  <properties>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <!-- One module per stage. Each stage is a complete, runnable copy of the program. -->
+  <modules>
+    <module>stage00-plain</module>
+    <module>stage01-rtti</module>
+  </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.0</version>
+          <configuration>
+            <!-- Keep method parameter names in the class files so that
+                 java.lang.reflect.Parameter.getName() returns real names (used from stage 02 on). -->
+            <parameters>true</parameters>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>sa4e.reflect.Main</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
