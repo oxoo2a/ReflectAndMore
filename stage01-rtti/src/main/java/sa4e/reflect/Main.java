@@ -26,6 +26,9 @@ public final class Main {
     }
 
     public static void main(String[] args) throws Exception {
+        System.out.println("Java " + Runtime.version() + ", " + System.getProperty("java.vm.name")
+                + " (" + System.getProperty("java.vendor") + "), " + System.getProperty("java.home"));
+        System.out.println();
 
         section("1. Static type vs. dynamic type");
         Candidate c = new Special(7);                       // static type Candidate, dynamic type Special

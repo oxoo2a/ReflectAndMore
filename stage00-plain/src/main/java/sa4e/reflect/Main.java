@@ -10,6 +10,9 @@ package sa4e.reflect;
 public final class Main {
 
     public static void main(String[] args) {
+        System.out.println("Java " + Runtime.version() + ", " + System.getProperty("java.vm.name")
+                + " (" + System.getProperty("java.vendor") + "), " + System.getProperty("java.home"));
+        System.out.println();
         Candidate a = new Candidate(7);
         Candidate b = new Candidate();
         a.f(3, -1.0);
