@@ -42,8 +42,8 @@ create the real object first.
 | `LazyHandler.java` | a virtual proxy creating the target on first use |
 | `RemoteStub.java`, `Skeleton.java`, `Wire.java` | client stub, server skeleton and a toy wire format |
 
-Changed: `Candidate` implements `Capability` and `f` is `@Transactional`. The validator and the
-test runner of stage 03 are no longer needed and were dropped; the annotation types
+Changed: `Candidate` implements `Capability` and `f` is `@Transactional`. The validator, the
+test runner, `Special` and `Variant` are no longer needed and were dropped; the annotation types
 `Comment`, `Marker`, `NotNull` and `Range` stay because `Candidate` uses them.
 
 ## In the real world

@@ -30,6 +30,7 @@
     <module>stage03-annotations</module>
     <module>stage04-proxies</module>
     <module>stage05-loading</module>
+    <module>stage06-ioc</module>
   </modules>
 
   <build>
