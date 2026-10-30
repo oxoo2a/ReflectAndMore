@@ -68,3 +68,5 @@ Every member of a class is itself an object that can be listed, inspected and us
 ```
 ./run.sh 02
 ```
+
+The output is Markdown; see [output.md](output.md) for the result of the last run.

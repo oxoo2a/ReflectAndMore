@@ -10,21 +10,24 @@ package sa4e.reflect;
 public final class Main {
 
     public static void main(String[] args) {
-        System.out.println("Java " + Runtime.version() + ", " + System.getProperty("java.vm.name")
-                + " (" + System.getProperty("java.vendor") + "), " + System.getProperty("java.home"));
-        System.out.println();
+        Report r = Report.stdout();
+        r.title("Stage 00: plain Java");
+
         Candidate a = new Candidate(7);
         Candidate b = new Candidate();
         a.f(3, -1.0);
 
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println("instances created: " + Candidate.created());
+        r.heading("Using Candidate the ordinary way");
+        r.kv("a = new Candidate(7); a.f(3, -1.0)", a);
+        r.kv("b = new Candidate()", b);
+        r.kv("Candidate.created()", Candidate.created());
 
-        // Things this program cannot do (yet):
-        //   - describe Candidate (its fields, constructors, methods) without reading its source code
-        //   - call secret() or the private constructor
-        //   - create an instance of a class whose name becomes known only while the program runs
-        //   - decorate, replace or wire Candidate without editing Main
+        r.heading("What this program cannot do");
+        r.item("describe Candidate (its fields, constructors, methods) without reading its source code");
+        r.item("call secret() or the private constructor");
+        r.item("create an instance of a class whose name becomes known only while the program runs");
+        r.item("decorate, replace or wire Candidate without editing Main");
+        r.note("Every call in this program was resolved when javac ran. The following stages remove these limits one by one.");
+        r.flush();
     }
 }

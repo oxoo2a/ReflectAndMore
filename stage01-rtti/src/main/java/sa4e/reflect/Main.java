@@ -26,110 +26,114 @@ public final class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Java " + Runtime.version() + ", " + System.getProperty("java.vm.name")
-                + " (" + System.getProperty("java.vendor") + "), " + System.getProperty("java.home"));
-        System.out.println();
+        Report r = Report.stdout();
+        r.title("Stage 01: run-time type information");
 
-        section("1. Static type vs. dynamic type");
+        r.heading("1. Static type vs. dynamic type");
         Candidate c = new Special(7);                       // static type Candidate, dynamic type Special
-        System.out.println("declared type of variable c : Candidate");
-        System.out.println("c.getClass()                : " + c.getClass());
-        System.out.println("c.getClass().getName()      : " + c.getClass().getName());
-        System.out.println("c instanceof Special        : " + (c instanceof Special));
-        note("The compiler only knows 'Candidate'. The JVM knows the real class of every object,");
-        note("because every object header points to its class metadata. getClass() just follows that pointer.");
+        r.kv("Candidate c = new Special(7)", "declared type Candidate");
+        r.kv("c.getClass()", c.getClass());
+        r.kv("c.getClass().getName()", c.getClass().getName());
+        r.kv("c instanceof Special", c instanceof Special);
+        r.note("The compiler only knows 'Candidate'. The JVM knows the real class of every object, because every "
+                + "object header points to its class metadata. getClass() just follows that pointer.");
 
-        section("2. Class objects are ordinary values");
+        r.heading("2. Class objects are ordinary values");
         Class<?>[] samples = {int.class, Integer.class, int[].class, String[][].class, Candidate.class,
                 Special.class, Variant.class, Variant.A.class, Variant.Mode.class, Runnable.class, void.class};
-        System.out.printf("%-26s %-16s %-26s %s%n", "getName()", "getSimpleName()", "getCanonicalName()", "kind");
+        List<String[]> rows = new ArrayList<>();
         for (Class<?> k : samples) {
-            System.out.printf("%-26s %-16s %-26s %s%n", k.getName(), k.getSimpleName(), k.getCanonicalName(), kind(k));
+            rows.add(new String[]{"`" + k.getName() + "`", k.getSimpleName(), String.valueOf(k.getCanonicalName()), kind(k)});
         }
-        System.out.println("Candidate.class == c.getClass()            : " + (Candidate.class == c.getClass()));
-        System.out.println("Candidate.class == new Candidate().getClass(): " + (Candidate.class == new Candidate().getClass()));
-        note("There is exactly one Class object per loaded class, so == works. int.class is not Integer.class,");
-        note("arrays are classes too ('[I' is int[]), and nested classes use '$' in getName().");
+        r.table(new String[]{"getName()", "getSimpleName()", "getCanonicalName()", "kind"}, rows);
+        r.kv("Candidate.class == c.getClass()", Candidate.class == c.getClass());
+        r.kv("Candidate.class == new Candidate().getClass()", Candidate.class == new Candidate().getClass());
+        r.note("There is exactly one Class object per loaded class, so == works. int.class is not Integer.class, "
+                + "arrays are classes too ('[I' is int[]), and nested classes use '$' in getName().");
 
-        section("3. From a string to a type: Class.forName()");
+        r.heading("3. From a string to a type: Class.forName()");
         Class<?> byName = Class.forName("sa4e.reflect.Candidate");
         Object instance = byName.getDeclaredConstructor().newInstance();
-        System.out.println("Class.forName(\"sa4e.reflect.Candidate\") -> " + byName);
-        System.out.println("new instance via reflection             -> " + instance);
+        r.kv("Class.forName(\"sa4e.reflect.Candidate\")", byName);
+        r.kv("byName.getDeclaredConstructor().newInstance()", instance);
         try {
             Class.forName("Candidate");
         } catch (ClassNotFoundException e) {
-            System.out.println("Class.forName(\"Candidate\")             -> ClassNotFoundException (package is part of the name)");
+            r.kv("Class.forName(\"Candidate\")", "ClassNotFoundException (the package is part of the name)");
         }
-        note("This is the door through which configuration files, plugins, JDBC drivers and");
-        note("dependency-injection containers enter a running program (stages 05 and 06).");
+        r.note("This is the door through which configuration files, plugins, JDBC drivers and "
+                + "dependency-injection containers enter a running program (stages 05 and 06).");
 
-        section("4. Walking the type hierarchy");
+        r.heading("4. Walking the type hierarchy");
         StringBuilder chain = new StringBuilder();
         for (Class<?> k = Special.class; k != null; k = k.getSuperclass()) {
             chain.append(k.getSimpleName()).append(k.getSuperclass() != null ? " -> " : "");
         }
-        System.out.println("superclass chain of Special : " + chain);
-        System.out.println("Special.getInterfaces()     : " + Arrays.toString(Special.class.getInterfaces()));
-        System.out.println("all interfaces of ArrayList : " + allInterfaces(ArrayList.class).stream().map(Class::getSimpleName).toList());
-        System.out.println("Object.getSuperclass()      : " + Object.class.getSuperclass());
+        r.kv("superclass chain of Special", chain);
+        r.kv("Special.class.getInterfaces()", Arrays.toString(Special.class.getInterfaces()));
+        r.kv("all interfaces of ArrayList (transitively)", allInterfaces(ArrayList.class).stream().map(Class::getSimpleName).toList());
+        r.kv("Object.class.getSuperclass()", Object.class.getSuperclass());
 
-        section("5. Type tests and casts through Class objects");
-        System.out.println("Candidate.class.isAssignableFrom(Special.class) : " + Candidate.class.isAssignableFrom(Special.class));
-        System.out.println("Special.class.isAssignableFrom(Candidate.class) : " + Special.class.isAssignableFrom(Candidate.class));
-        System.out.println("Special.class.isInstance(c)                     : " + Special.class.isInstance(c));
+        r.heading("5. Type tests and casts through Class objects");
+        r.kv("Candidate.class.isAssignableFrom(Special.class)", Candidate.class.isAssignableFrom(Special.class));
+        r.kv("Special.class.isAssignableFrom(Candidate.class)", Special.class.isAssignableFrom(Candidate.class));
+        r.kv("Special.class.isInstance(c)", Special.class.isInstance(c));
         Special s = Special.class.cast(c);                  // the reflective form of (Special) c
-        System.out.println("Special.class.cast(c).getX()                    : " + s.getX());
+        r.kv("Special.class.cast(c).getX()", s.getX());
         try {
             Variant.A.class.cast(c);
         } catch (ClassCastException e) {
-            System.out.println("Variant.A.class.cast(c)                         : ClassCastException");
+            r.kv("Variant.A.class.cast(c)", "ClassCastException");
         }
-        note("isAssignableFrom and isInstance are what a container uses to find 'all components that implement X'.");
+        r.note("isAssignableFrom and isInstance are what a container uses to find 'all components that implement X'.");
 
-        section("6. Pattern matching: the compiler uses RTTI too");
+        r.heading("6. Pattern matching: the compiler uses RTTI too");
         for (Variant v : List.of(new Variant.A(1, "one"), new Variant.B(2.5))) {
             String text = switch (v) {                       // no default branch needed: Variant is sealed
                 case Variant.A a -> "A with value " + a.value() + " and tag " + a.tag();
                 case Variant.B b -> "B with weight " + b.weight();
             };
-            System.out.println(v.getClass().getSimpleName() + " is " + text);
+            r.kv("switch (v) for a " + v.getClass().getSimpleName(), text);
         }
-        note("instanceof and switch patterns are compiled to type checks against the object's class.");
+        r.note("instanceof and switch patterns are compiled to type checks against the object's class.");
 
-        section("7. Sealed types, records and enums describe themselves");
-        System.out.println("Variant.class.isSealed()          : " + Variant.class.isSealed());
-        System.out.println("Variant.getPermittedSubclasses()  : " + Arrays.stream(Variant.class.getPermittedSubclasses()).map(Class::getSimpleName).toList());
-        System.out.println("Variant.A.class.isRecord()        : " + Variant.A.class.isRecord());
-        System.out.println("Variant.A.getRecordComponents()   : " + components(Variant.A.class));
-        System.out.println("Variant.B.class.isRecord()        : " + Variant.B.class.isRecord());
-        System.out.println("Variant.Mode.class.isEnum()       : " + Variant.Mode.class.isEnum());
-        System.out.println("Variant.Mode.getEnumConstants()   : " + Arrays.toString(Variant.Mode.class.getEnumConstants()));
-        note("Record components are the reason records are so convenient for generic serializers (stage 02).");
+        r.heading("7. Sealed types, records and enums describe themselves");
+        r.kv("Variant.class.isSealed()", Variant.class.isSealed());
+        r.kv("Variant.class.getPermittedSubclasses()", Arrays.stream(Variant.class.getPermittedSubclasses()).map(Class::getSimpleName).toList());
+        r.kv("Variant.A.class.isRecord()", Variant.A.class.isRecord());
+        r.kv("Variant.A.class.getRecordComponents()", components(Variant.A.class));
+        r.kv("Variant.B.class.isRecord()", Variant.B.class.isRecord());
+        r.kv("Variant.Mode.class.isEnum()", Variant.Mode.class.isEnum());
+        r.kv("Variant.Mode.class.getEnumConstants()", Arrays.toString(Variant.Mode.class.getEnumConstants()));
+        r.note("Record components are the reason records are so convenient for generic serializers (stage 02).");
 
-        section("8. Generics are erased from objects, but declarations keep their signatures");
-        System.out.println("new ArrayList<String>().getClass() == new ArrayList<Integer>().getClass() : "
-                + (new ArrayList<String>().getClass() == new ArrayList<Integer>().getClass()));
+        r.heading("8. Generics are erased from objects, but declarations keep their signatures");
+        r.kv("new ArrayList<String>().getClass() == new ArrayList<Integer>().getClass()",
+                new ArrayList<String>().getClass() == new ArrayList<Integer>().getClass());
         Field items = Holder.class.getDeclaredField("items");
         Field index = Holder.class.getDeclaredField("index");
-        System.out.println("field items: getType() = " + items.getType().getSimpleName() + ", getGenericType() = " + items.getGenericType());
-        System.out.println("field index: getType() = " + index.getType().getSimpleName() + ", getGenericType() = " + index.getGenericType());
+        r.kv("field items: getType()", items.getType().getSimpleName());
+        r.kv("field items: getGenericType()", items.getGenericType());
+        r.kv("field index: getType()", index.getType().getSimpleName());
+        r.kv("field index: getGenericType()", index.getGenericType());
         TypeRef<List<String>> ref = new TypeRef<>() {};
-        System.out.println("new TypeRef<List<String>>() {}.type()  = " + ref.type());
-        note("The ArrayList object does not know it is a List<String>; the field and the anonymous subclass declaration do.");
+        r.kv("new TypeRef<List<String>>() {}.type()", ref.type());
+        r.note("The ArrayList object does not know it is a List<String>; the field declaration and the anonymous "
+                + "subclass declaration do. Jackson's TypeReference uses this trick.");
 
-        section("9. Lambdas and anonymous classes have classes too");
+        r.heading("9. Lambdas and anonymous classes have classes too");
         Runnable lambda = () -> {};
         Runnable anonymous = new Runnable() {
             @Override
             public void run() {}
         };
-        System.out.println("lambda    : " + lambda.getClass().getName()
-                + "  hidden=" + lambda.getClass().isHidden() + " synthetic=" + lambda.getClass().isSynthetic());
-        System.out.println("anonymous : " + anonymous.getClass().getName()
-                + "  anonymous=" + anonymous.getClass().isAnonymousClass());
-        note("Lambda classes are generated at run time and are 'hidden': Class.forName() cannot find them.");
-        note("Stage 07 generates classes the same way.");
+        r.kv("lambda.getClass().getName()", lambda.getClass().getName());
+        r.kv("lambda.getClass().isHidden()", lambda.getClass().isHidden());
+        r.kv("anonymous.getClass().getName()", anonymous.getClass().getName());
+        r.kv("anonymous.getClass().isAnonymousClass()", anonymous.getClass().isAnonymousClass());
+        r.note("Lambda classes are generated at run time and are 'hidden': Class.forName() cannot find them. "
+                + "Stage 07 generates classes the same way.");
+        r.flush();
     }
 
     private static String kind(Class<?> k) {
@@ -160,14 +164,5 @@ public final class Main {
             }
         }
         return result;
-    }
-
-    private static void section(String title) {
-        System.out.println();
-        System.out.println("── " + title);
-    }
-
-    private static void note(String text) {
-        System.out.println("   ℹ " + text);
     }
 }

@@ -20,3 +20,5 @@ meta-programming mechanism.
 ```
 ./run.sh 00
 ```
+
+The output is Markdown; see [output.md](output.md) for the result of the last run.

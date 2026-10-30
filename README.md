@@ -47,6 +47,17 @@ mvn -q package
 java -jar stage01-rtti/target/stage01-rtti-2026W.jar
 ```
 
+Every stage prints Markdown. Redirect it into a file for a readable document:
+
+```
+./run.sh 02 > stage02-reflection/output.md
+```
+
+The committed `output.md` in each stage folder is exactly that, so a stage can be read without
+running it. `tools/save-outputs.sh` regenerates all of them; `tools/save-outputs.sh --check`
+compares the current output with the committed files (ignoring the Java version line and the
+benchmark numbers), which serves as a regression test after edits.
+
 ## Seeing what a stage adds
 
 ```
@@ -62,5 +73,7 @@ tools/diff-stages.sh 03 05     # stage03 -> stage05
   frameworks do with it, what it costs, exercises.
 - Each stage's `Main` demonstrates only the new mechanism; earlier material stays in the earlier
   folder. Helper classes are carried forward only while a later stage still uses them.
+- `Report` is a small Markdown printer, identical in all stages. It is infrastructure, not part of
+  the material.
 - `Candidate` changes only when the next mechanism needs it (an interface, an annotation, an
   injected field). Everything that grows is the framework around it.

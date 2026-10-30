@@ -57,3 +57,5 @@ side effects (that is exactly how JDBC drivers used to register themselves).
 ```
 ./run.sh 01
 ```
+
+The output is Markdown; see [output.md](output.md) for the result of the last run.
