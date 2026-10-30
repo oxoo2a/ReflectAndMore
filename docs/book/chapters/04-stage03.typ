@@ -75,12 +75,14 @@ The last line is the one to remember: an annotation type is an _interface_, and 
 Because members are methods, a tool can read an annotation it has never heard of. Stage 03's `Inspector` gets one new helper:
 
 ```java
-private static void appendAnnotations(StringBuilder xml, AnnotatedElement element, String indent) {
+private static void appendAnnotations(StringBuilder xml, AnnotatedElement element,
+                                      String indent) {
     for (Annotation a : element.getAnnotations()) {
         Class<? extends Annotation> type = a.annotationType();
         Method[] members = type.getDeclaredMethods();
         Arrays.sort(members, Comparator.comparing(Method::getName));
-        xml.append(indent).append("<annotation type=\"").append(type.getName()).append("\"");
+        xml.append(indent).append("<annotation type=\"")
+           .append(type.getName()).append("\"");
         if (members.length == 0) { xml.append("/>\n"); continue; }
         xml.append(">\n");
         for (Method member : members) {
@@ -137,7 +139,8 @@ public static final class Probe {}
 Reflection sees only `RuntimeOnly`. To find out what happened to the other two we do not take anybody's word for it; we read the bytes of `Probe.class` with the ClassFile API, which Java 24 added to the JDK and which stage 07 uses in earnest:
 
 ```java
-byte[] bytes = Retentions.Probe.class.getResourceAsStream("Retentions$Probe.class").readAllBytes();
+byte[] bytes = Retentions.Probe.class
+        .getResourceAsStream("Retentions$Probe.class").readAllBytes();
 ClassModel model = ClassFile.of().parse(bytes);
 List<String> invisible = model.findAttribute(Attributes.runtimeInvisibleAnnotations())
         .map(a -> a.annotations().stream().map(x -> x.classSymbol().displayName()).toList())
@@ -251,7 +254,8 @@ The second framework introduces the idea the rest of the book is built on. Three
 ```java
 @Retention(RUNTIME) @Target(METHOD) public @interface Test {}
 @Retention(RUNTIME) @Target(METHOD) public @interface BeforeEach {}
-@Retention(RUNTIME) @Target(METHOD) public @interface Disabled { String value() default ""; }
+@Retention(RUNTIME) @Target(METHOD)
+public @interface Disabled { String value() default ""; }
 ```
 
 a test class that uses them and never calls its own methods:
@@ -279,7 +283,8 @@ public class CandidateTests {
     void notYet() {}
 
     private static void assertEquals(int expected, int actual) {
-        if (expected != actual) throw new AssertionError("expected " + expected + " but was " + actual);
+        if (expected != actual)
+            throw new AssertionError("expected " + expected + " but was " + actual);
     }
 }
 ```
@@ -289,11 +294,11 @@ and a runner:
 ```java
 public static List<Result> run(Class<?> testClass) throws ReflectiveOperationException {
     Method[] methods = testClass.getDeclaredMethods();
-    Arrays.sort(methods, Comparator.comparing(Method::getName));   // reflection promises no order
+    Arrays.sort(methods, Comparator.comparing(Method::getName));   // no order promised
     List<Method> setups = new ArrayList<>();
     List<Method> tests = new ArrayList<>();
     for (Method m : methods) {
-        m.setAccessible(true);                                     // tests are usually package-private
+        m.setAccessible(true);                       // tests are usually package-private
         if (m.isAnnotationPresent(BeforeEach.class)) setups.add(m);
         if (m.isAnnotationPresent(Test.class)) tests.add(m);
     }
@@ -305,7 +310,7 @@ public static List<Result> run(Class<?> testClass) throws ReflectiveOperationExc
             results.add(new Result(test.getName(), "skipped", disabled.value()));
             continue;
         }
-        Object instance = testClass.getDeclaredConstructor().newInstance();   // fresh per test
+        Object instance = testClass.getDeclaredConstructor().newInstance(); // fresh
         try {
             for (Method setup : setups) setup.invoke(instance);
             test.invoke(instance);

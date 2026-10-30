@@ -23,9 +23,9 @@ public final class Main {
         r.kv("Candidate.created()", Candidate.created());
 
         r.heading("What this program cannot do");
-        r.item("describe Candidate (its fields, constructors, methods) without reading its source code");
+        r.item("describe Candidate (fields, constructors, methods) without its source");
         r.item("call secret() or the private constructor");
-        r.item("create an instance of a class whose name becomes known only while the program runs");
+        r.item("create an instance of a class whose name is known only at run time");
         r.item("decorate, replace or wire Candidate without editing Main");
         r.flush();
     }

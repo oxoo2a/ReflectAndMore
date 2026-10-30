@@ -59,7 +59,7 @@ public final class Inspector {
         return xml.toString();
     }
 
-    /** Constructors and methods share the type Executable, so parameters are handled once. */
+    /** Constructors and methods share the type Executable: parameters handled once. */
     private static void appendParameters(StringBuilder xml, Executable executable) {
         for (Parameter p : executable.getParameters()) {
             xml.append("    <parameter name=\"").append(p.getName())
@@ -269,12 +269,12 @@ public static Object call(Object target, String name, Object... args)
     throw new NoSuchMethodException(type.getName() + "." + name);
 }
 
-/** True if every argument can be passed to the corresponding parameter (boxing included). */
+/** True if every argument fits the corresponding parameter (boxing included). */
 private static boolean matches(Class<?>[] parameterTypes, Object[] args) {
     if (parameterTypes.length != args.length) return false;
     for (int i = 0; i < args.length; i++) {
         if (args[i] == null) {
-            if (parameterTypes[i].isPrimitive()) return false;   // null cannot become an int
+            if (parameterTypes[i].isPrimitive()) return false;   // null is no int
             continue;
         }
         if (!wrap(parameterTypes[i]).isInstance(args[i])) return false;

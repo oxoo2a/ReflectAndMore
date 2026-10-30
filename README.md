@@ -14,6 +14,12 @@ called `Candidate`; everything else is named after its role in the mechanism (`I
 
 Pure JDK 25, no third-party dependencies.
 
+## The book
+
+[docs/ReflectAndMore.pdf](docs/ReflectAndMore.pdf) is a textbook that walks through all stages in
+detail: an introduction, one chapter per stage and a conclusion, with the real program output
+quoted throughout. The source is in `docs/book/` (Typst); `docs/book/build.sh` rebuilds the PDF.
+
 ## Stages
 
 Each stage is a complete, runnable copy of the program in its own folder. The difference between

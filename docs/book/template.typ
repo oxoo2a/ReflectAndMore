@@ -57,7 +57,7 @@
   set heading(numbering: none)
 
   // Code
-  show raw: set text(font: code-font, size: 8.6pt)
+  show raw: set text(font: code-font, size: 8.1pt)
   show raw.where(block: true): it => block(
     width: 100%,
     fill: paper-gray,
@@ -175,7 +175,8 @@
 
 // Expression/result table, the native rendering of what Report.kv prints.
 #let results(..rows) = table(
-  columns: (auto, 1fr),
+  // long expressions get half the width, otherwise the first column takes what it needs
+  columns: if rows.pos().map(r => r.at(0).len()).fold(0, calc.max) > 48 { (1fr, 1fr) } else { (auto, 1fr) },
   align: (left, left),
   [Expression], [Result],
   ..rows.pos().map(r => (
