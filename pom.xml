@@ -26,6 +26,7 @@
   <modules>
     <module>stage00-plain</module>
     <module>stage01-rtti</module>
+    <module>stage02-reflection</module>
   </modules>
 
   <build>
