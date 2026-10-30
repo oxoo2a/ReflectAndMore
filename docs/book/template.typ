@@ -108,6 +108,7 @@
                  fill: rgb("#0a1a2e").transparentize(18%), stroke: (left: 0.5pt + white.transparentize(70%)))[
             #set text(font: head-font, fill: white)
             #set par(leading: 0.4em)
+            #set align(center)
             #text(size: 8.5pt, fill: white.transparentize(30%), tracking: 0.14em)[#upper(affiliation)]
             #v(0.35cm)
             #text(size: 36pt, weight: "bold")[#title]
