@@ -18,6 +18,16 @@
   cover-image: if cover == "midjourney" { "assets/cover-midjourney.png" }
                else if cover == "dalle" { "assets/cover-dalle.png" }
                else { none },
+  back-image: if cover == "drawn" { none } else { "assets/back-vault.png" },
+  colophon: [
+    *ReflectAndMore* · written by Claude, inspired by a discussion with Peter Sturm \
+    Software Architectures for Enterprises · Universität Trier · Winter term 2026/27 \
+    Typeset with Typst in Charter, Avenir Next and Source Code Pro. Cover and back cover images
+    generated with DALL·E from prompts written for this book; the class-on-a-mirror drawing in the
+    introduction is drawn in Typst. \
+    The code is in the repository next to this book: one folder per stage, `./run.sh NN` runs one. \
+    #version#if built != "" [ · built #built]
+  ],
 )
 
 // Table of contents

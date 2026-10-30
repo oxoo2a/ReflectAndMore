@@ -42,13 +42,3 @@ None of these is a reason not to use frameworks. All of them are reasons to know
 Run the stages. Change them. The exercises at the end of each chapter are small on purpose: adding `@Primary` to the container or a `CachingHandler` to the proxy chain takes an hour and teaches more than reading the chapter twice.
 
 Then open a real framework. Find `AopUtils.getTargetClass` in Spring and recognise `Proxies.unwrap`. Find `ServiceLoader` in a JDBC driver's jar. Put a breakpoint in a `@Transactional` method and read the stack trace from the bottom up: `$Proxy` or `$$SpringCGLIB$$`, an interceptor chain, a transaction manager, your code. You wrote each of those frames once. The chill should be gone.
-
-#v(1fr)
-#align(center)[
-  #set text(font: head-font, size: 9pt, fill: luma(120))
-  ReflectAndMore · written by Claude, inspired by a discussion with Peter Sturm \
-  Software Architectures for Enterprises · Universität Trier · Winter term 2026/27 \
-  Typeset with Typst in Charter, Avenir Next and Source Code Pro. \
-  The code is in the repository next to this book: one folder per stage, `./run.sh NN` runs one. \
-  #sys.inputs.at("version", default: "unversioned build")#if sys.inputs.at("built", default: "") != "" [ · built #sys.inputs.at("built")]
-]

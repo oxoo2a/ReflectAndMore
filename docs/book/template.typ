@@ -11,7 +11,7 @@
 #let ink = rgb("#1f2328")
 #let paper-gray = luma(246)
 
-#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", version: "", art: none, cover-image: none, body) = {
+#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", version: "", art: none, cover-image: none, back-image: none, colophon: none, body) = {
   set document(title: title, author: author)
   set page(
     paper: "a4",
@@ -146,6 +146,21 @@
   }
 
   body
+
+  // Back cover: a full-bleed image with the colophon in a band at the bottom.
+  if back-image != none {
+    pagebreak(weak: true)
+    page(header: none, numbering: none, margin: 0pt)[
+      #place(top + left)[#image(back-image, width: 100%, height: 100%, fit: "cover")]
+      #place(bottom + left)[
+        #block(width: 100%, inset: (x: 2.2cm, y: 1.2cm), fill: rgb("#0a1a2e").transparentize(22%))[
+          #set text(font: head-font, size: 9pt, fill: white.transparentize(15%))
+          #set par(leading: 0.6em)
+          #colophon
+        ]
+      ]
+    ]
+  }
 }
 
 // Chapter opener: a stage number, a title and a tagline.
