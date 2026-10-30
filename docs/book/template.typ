@@ -100,16 +100,20 @@
       #place(top + left)[#image(cover-image, width: 100%, height: 100%, fit: "cover")]
       // darken top and bottom a little so that white type stays legible
       #place(bottom + left)[#rect(width: 100%, height: 22%, fill: gradient.linear(rgb("#0a1a2e").transparentize(100%), rgb("#0a1a2e").transparentize(20%), angle: 90deg), stroke: none)]
-      // title on a translucent panel, so that it stays legible over the busy centre of the image
-      #place(bottom + left, dx: 1.6cm, dy: -4.9cm)[
-        #block(width: 14.6cm, radius: 8pt, inset: (x: 0.8cm, y: 0.7cm),
-               fill: rgb("#0a1a2e").transparentize(18%), stroke: 0.5pt + white.transparentize(75%))[
-          #set text(font: head-font, fill: white)
-          #text(size: 9.5pt, fill: white.transparentize(25%), tracking: 0.12em)[#upper(affiliation)]
-          #v(0.7cm)
-          #text(size: 40pt, weight: "bold")[#title]
-          #v(0.35cm)
-          #text(size: 13.5pt, weight: "medium", fill: white.transparentize(10%))[#subtitle]
+      // title in a vertical band along the right edge, rotated counter-clockwise so that it
+      // reads from bottom to top; the image stays almost entirely uncovered
+      #place(top + right)[
+        #rotate(-90deg, reflow: true)[
+          #block(width: 29.7cm, inset: (x: 1.4cm, y: 0.55cm),
+                 fill: rgb("#0a1a2e").transparentize(18%), stroke: (left: 0.5pt + white.transparentize(70%)))[
+            #set text(font: head-font, fill: white)
+            #set par(leading: 0.4em)
+            #text(size: 8.5pt, fill: white.transparentize(30%), tracking: 0.14em)[#upper(affiliation)]
+            #v(0.35cm)
+            #text(size: 36pt, weight: "bold")[#title]
+            #v(0.2cm)
+            #text(size: 12.5pt, weight: "medium", fill: white.transparentize(10%))[#subtitle]
+          ]
         ]
       ]
       #place(bottom + left, dx: 2.4cm, dy: -2.0cm)[
