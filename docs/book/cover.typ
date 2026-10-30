@@ -49,7 +49,7 @@
   ]
 ]
 
-#let cover-art() = box(width: 12.2cm, height: 11.4cm)[
+#let cover-art() = box(width: 12.2cm, height: 9.8cm, clip: true)[
   // ghost cards: generated classes standing behind the real one
   #ghost("Candidate$$Intercepted", 5.3cm, 0.0cm)
   #ghost("$Proxy0", 4.8cm, 0.45cm)
@@ -77,6 +77,6 @@
     #scale(y: -100%, reflow: true)[#class-card(reflected: true)]
   ]
   #place(top + left, dx: 4.1cm, dy: 6.08cm)[
-    #rect(width: card-width + 0.4cm, height: 5.4cm, fill: gradient.linear(white.transparentize(100%), white.transparentize(25%), white, white, angle: 90deg), stroke: none)
+    #rect(width: card-width + 0.4cm, height: 3.8cm, fill: gradient.linear(white.transparentize(100%), white.transparentize(20%), white, angle: 90deg), stroke: none)
   ]
 ]
