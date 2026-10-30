@@ -4,6 +4,7 @@
 #   ./run.sh 01            run stage01-*
 #   ./run.sh stage01-rtti  same, by folder name
 #   ./run.sh 01 --foo      extra arguments are passed to the program
+#   ./run.sh 05 -Dkey=v    arguments starting with -D, -X or --add-opens go to the JVM
 #
 # Output goes to <stage>/out/classes. Maven users: mvn -q package && java -jar <stage>/target/*.jar
 set -euo pipefail
@@ -31,4 +32,8 @@ javac --release 25 -parameters -d "$out" $(find "$stage/src/main/java" -name '*.
 if [[ -d "$stage/src/main/resources" ]]; then
   cp -R "$stage/src/main/resources/." "$out"/
 fi
-exec java -cp "$out" sa4e.reflect.Main "$@"
+jvm=(); prog=()
+for a in "$@"; do
+  case "$a" in -D*|-X*|--add-opens*|--enable-*) jvm+=("$a");; *) prog+=("$a");; esac
+done
+exec java ${jvm[@]+"${jvm[@]}"} -cp "$out" sa4e.reflect.Main ${prog[@]+"${prog[@]}"}

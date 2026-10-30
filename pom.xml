@@ -29,6 +29,7 @@
     <module>stage02-reflection</module>
     <module>stage03-annotations</module>
     <module>stage04-proxies</module>
+    <module>stage05-loading</module>
   </modules>
 
   <build>

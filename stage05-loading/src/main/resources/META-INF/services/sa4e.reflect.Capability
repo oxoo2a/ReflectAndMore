@@ -1,0 +1,3 @@
+# Implementations of sa4e.reflect.Capability, found by java.util.ServiceLoader.
+sa4e.reflect.Candidate
+sa4e.reflect.Alternative
