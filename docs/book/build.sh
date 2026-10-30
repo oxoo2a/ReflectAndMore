@@ -16,5 +16,9 @@ else
 fi
 built=$(date +%Y-%m-%d)
 
-typst compile --root .. --input version="$version" --input built="$built" book.typ ../ReflectAndMore.pdf
-echo "wrote docs/ReflectAndMore.pdf  [$version, built $built]"
+# ./build.sh            drawn cover (default)  -> docs/ReflectAndMore.pdf
+# ./build.sh image OUT  photographic cover      -> OUT (e.g. a preview outside the repository)
+cover="${1:-drawn}"
+out="${2:-../ReflectAndMore.pdf}"
+typst compile --root .. --input version="$version" --input built="$built" --input cover="$cover" book.typ "$out"
+echo "wrote $out  [cover: $cover, $version, built $built]"

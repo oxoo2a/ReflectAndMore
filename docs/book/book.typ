@@ -4,6 +4,8 @@
 // Set by build.sh from git: --input version=... --input built=...
 #let version = sys.inputs.at("version", default: "unversioned build")
 #let built = sys.inputs.at("built", default: "")
+// --input cover=image uses the photograph in assets/, anything else the drawn cover art
+#let cover = sys.inputs.at("cover", default: "drawn")
 
 #show: book.with(
   title: "ReflectAndMore",
@@ -13,6 +15,7 @@
   date: "Inspired by a discussion with Peter Sturm · Winter term 2026/27",
   version: version + (if built != "" { " · built " + built } else { "" }),
   art: cover-art(),
+  cover-image: if cover == "image" { "assets/cover-midjourney.png" } else { none },
 )
 
 // Table of contents

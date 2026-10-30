@@ -11,7 +11,7 @@
 #let ink = rgb("#1f2328")
 #let paper-gray = luma(246)
 
-#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", version: "", art: none, body) = {
+#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", version: "", art: none, cover-image: none, body) = {
   set document(title: title, author: author)
   set page(
     paper: "a4",
@@ -86,23 +86,48 @@
   set list(indent: 1em, marker: text(fill: accent)[▪])
   set enum(indent: 1em)
 
-  // Title page
-  page(header: none, numbering: none, margin: (top: 3.5cm, bottom: 2.5cm, x: 3cm))[
-    #set text(font: head-font)
-    #text(size: 11pt, fill: luma(110), tracking: 0.12em)[#upper(affiliation)]
-    #v(1.4cm)
-    #text(size: 40pt, weight: "bold", fill: accent)[#title]
-    #v(0.6cm)
-    #text(size: 17pt, weight: "medium", fill: ink)[#subtitle]
-    #v(1fr)
-    #align(center)[#art]
-    #v(1fr)
-    #text(size: 13pt, weight: "medium")[#author]
-    #linebreak()
-    #text(size: 10.5pt, fill: luma(100))[#date]
-    #linebreak()
-    #text(size: 9pt, fill: luma(140))[#version]
-  ]
+  // Title page: a full-bleed photograph with the typography laid over it, or the drawn cover art.
+  if cover-image != none {
+    page(header: none, numbering: none, margin: 0pt)[
+      #place(top + left)[#image(cover-image, width: 100%, height: 100%, fit: "cover")]
+      // darken top and bottom a little so that white type stays legible
+      #place(top + left)[#rect(width: 100%, height: 42%, fill: gradient.linear(rgb("#0a1a2e").transparentize(25%), rgb("#0a1a2e").transparentize(100%), angle: 90deg), stroke: none)]
+      #place(bottom + left)[#rect(width: 100%, height: 22%, fill: gradient.linear(rgb("#0a1a2e").transparentize(100%), rgb("#0a1a2e").transparentize(20%), angle: 90deg), stroke: none)]
+      #place(top + left, dx: 2.2cm, dy: 2.6cm)[
+        #set text(font: head-font, fill: white)
+        #text(size: 10pt, fill: white.transparentize(25%), tracking: 0.12em)[#upper(affiliation)]
+        #v(1.2cm)
+        #text(size: 44pt, weight: "bold")[#title]
+        #v(0.5cm)
+        #block(width: 14.5cm)[#text(size: 15pt, weight: "medium", fill: white.transparentize(10%))[#subtitle]]
+      ]
+      #place(bottom + left, dx: 2.2cm, dy: -2.2cm)[
+        #set text(font: head-font, fill: white)
+        #text(size: 13pt, weight: "medium")[#author]
+        #linebreak()
+        #text(size: 10.5pt, fill: white.transparentize(20%))[#date]
+        #linebreak()
+        #text(size: 9pt, fill: white.transparentize(40%))[#version]
+      ]
+    ]
+  } else {
+    page(header: none, numbering: none, margin: (top: 3.5cm, bottom: 2.5cm, x: 3cm))[
+      #set text(font: head-font)
+      #text(size: 11pt, fill: luma(110), tracking: 0.12em)[#upper(affiliation)]
+      #v(1.4cm)
+      #text(size: 40pt, weight: "bold", fill: accent)[#title]
+      #v(0.6cm)
+      #text(size: 17pt, weight: "medium", fill: ink)[#subtitle]
+      #v(1fr)
+      #align(center)[#art]
+      #v(1fr)
+      #text(size: 13pt, weight: "medium")[#author]
+      #linebreak()
+      #text(size: 10.5pt, fill: luma(100))[#date]
+      #linebreak()
+      #text(size: 9pt, fill: luma(140))[#version]
+    ]
+  }
 
   body
 }
