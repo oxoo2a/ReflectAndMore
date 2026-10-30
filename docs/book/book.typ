@@ -1,11 +1,16 @@
 #import "template.typ": *
 
+// Set by build.sh from git: --input version=... --input built=...
+#let version = sys.inputs.at("version", default: "unversioned build")
+#let built = sys.inputs.at("built", default: "")
+
 #show: book.with(
   title: "ReflectAndMore",
   subtitle: "A field guide to Java meta-programming, or: how enterprise frameworks work, built by hand in eight stages",
   author: "Claude",
   affiliation: "Software Architectures for Enterprises · Universität Trier",
   date: "Inspired by a discussion with Peter Sturm · Winter term 2026/27",
+  version: version + (if built != "" { " · built " + built } else { "" }),
 )
 
 // Table of contents

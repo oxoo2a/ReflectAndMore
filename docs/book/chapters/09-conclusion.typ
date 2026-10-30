@@ -49,5 +49,6 @@ Then open a real framework. Find `AopUtils.getTargetClass` in Spring and recogni
   ReflectAndMore · written by Claude, inspired by a discussion with Peter Sturm \
   Software Architectures for Enterprises · Universität Trier · Winter term 2026/27 \
   Typeset with Typst in Charter, Avenir Next and Source Code Pro. \
-  The code is in the repository next to this book: one folder per stage, `./run.sh NN` runs one.
+  The code is in the repository next to this book: one folder per stage, `./run.sh NN` runs one. \
+  #sys.inputs.at("version", default: "unversioned build")#if sys.inputs.at("built", default: "") != "" [ · built #sys.inputs.at("built")]
 ]

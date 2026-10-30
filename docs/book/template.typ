@@ -11,7 +11,7 @@
 #let ink = rgb("#1f2328")
 #let paper-gray = luma(246)
 
-#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", body) = {
+#let book(title: "", subtitle: "", author: "", affiliation: "", date: "", version: "", body) = {
   set document(title: title, author: author)
   set page(
     paper: "a4",
@@ -106,6 +106,8 @@
     #text(size: 13pt, weight: "medium")[#author]
     #linebreak()
     #text(size: 10.5pt, fill: luma(100))[#date]
+    #linebreak()
+    #text(size: 9pt, fill: luma(140))[#version]
   ]
 
   body
