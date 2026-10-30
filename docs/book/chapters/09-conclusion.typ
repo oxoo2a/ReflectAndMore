@@ -46,7 +46,8 @@ Then open a real framework. Find `AopUtils.getTargetClass` in Spring and recogni
 #v(1fr)
 #align(center)[
   #set text(font: head-font, size: 9pt, fill: luma(120))
-  ReflectAndMore · Software Architectures for Enterprises · Universität Trier · Winter term 2026/27 \
+  ReflectAndMore · written by Claude, inspired by a discussion with Peter Sturm \
+  Software Architectures for Enterprises · Universität Trier · Winter term 2026/27 \
   Typeset with Typst in Charter, Avenir Next and Source Code Pro. \
   The code is in the repository next to this book: one folder per stage, `./run.sh NN` runs one.
 ]

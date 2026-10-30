@@ -3,9 +3,9 @@
 #show: book.with(
   title: "ReflectAndMore",
   subtitle: "A field guide to Java meta-programming, or: how enterprise frameworks work, built by hand in eight stages",
-  author: "Peter Sturm",
+  author: "Claude",
   affiliation: "Software Architectures for Enterprises · Universität Trier",
-  date: "Winter term 2026/27 · written with Claude",
+  date: "Inspired by a discussion with Peter Sturm · Winter term 2026/27",
 )
 
 // Table of contents
