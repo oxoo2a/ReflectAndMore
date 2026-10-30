@@ -87,8 +87,6 @@ Each folder is a complete, runnable program. All of them use the same package `s
 ./run.sh 03
 ```
 
-Every program prints Markdown. In the terminal that reads fine; redirected into a file it becomes a document with headings and tables, and each stage folder contains such a file, `output.md`, from the last run. The output excerpts in this book are taken from those files, so what you read here is what the program really printed.
-
 Every chapter follows the same rhythm, because every stage does:
 
 + *Where we stand.* A concrete limitation of the previous stage. Not a philosophical one; a line of code that cannot be written.
@@ -96,6 +94,27 @@ Every chapter follows the same rhythm, because every stage does:
 + *In the wild.* Which framework does this for a living, and how far our toy is from the real thing.
 + *The bill.* What it costs: performance, security, debuggability, build-time tooling.
 + *Try it yourself.* Exercises. The best way to believe that a container is 150 lines is to add a feature to it.
+
+== Report, or why the programs speak Markdown
+
+Every `Main` in this book starts with the same two lines:
+
+```java
+Report r = Report.stdout();
+r.title("Stage 02: reflection");
+```
+
+and then calls `r.heading(...)`, `r.kv(expression, value)`, `r.note(...)`, `r.code(language, text)` and `r.item(...)`. `Report` is a hundred-line helper, identical in every stage, and it is deliberately not part of the material: it is `System.out.println` wearing a nicer suit. But the suit was a decision, and it is worth a paragraph.
+
+The programs print _Markdown_. `title` becomes a `#` heading, `heading` a `##` heading, `note` a block quote, `code` a fenced block, and consecutive `kv` calls are collected into a two-column table of expressions and results. Markdown was designed to be readable as plain text, so in a terminal the output looks like a tidy report with tables drawn in ASCII. Redirected into a file it becomes a document that any viewer, editor or forge renders with real headings and tables:
+
+```sh
+./run.sh 02 > stage02-reflection/output.md
+```
+
+Each stage folder contains exactly such a file from the last run, committed next to the code. That has three consequences that shaped this book. First, a stage can be _read_ without being run; the forge shows the output next to the README. Second, every result quoted in these chapters was copied from an `output.md`, not typed from memory, so if a table here says `false`, the program printed `false`. Third, the committed outputs are a regression test: `tools/save-outputs.sh --check` runs every stage and compares, ignoring the lines that legitimately change between runs, the Java version, benchmark timings, the addresses of hidden classes. When a change to `Candidate` alters what stage 04 prints, that check says so before anybody notices in a lecture.
+
+The one thing `Report` is careful about is the `kv` table: rows are buffered until the next element of a different kind, so that a run of `kv` calls becomes one table rather than many. If you add a section to a stage, end it with a `note` or a `heading`, or call `r.flush()`, and the last table appears.
 
 == The map
 
