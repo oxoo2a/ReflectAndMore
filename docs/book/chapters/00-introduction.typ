@@ -1,4 +1,5 @@
 #import "../template.typ": *
+#import "../cover.typ": cover-art
 
 #chapter(title: "Introduction", tagline: [In which we promise to take the magic out of enterprise Java, and introduce the most boring class ever written.])
 
@@ -68,6 +69,15 @@ public class Candidate {
 That is all there is. Three constructors of three visibilities, a private field, a private final field, a static counter, a public method with two parameters, a protected method, a private method, a static method. There is nothing to understand about what `Candidate` _does_, which leaves all your attention for what we do _to_ it. Everything else in the book is named after its role in the mechanism: `Inspector`, `Invoker`, `Validator`, `Interceptor`, `Container`, `Plugin`, `Dependency`. When you later meet Spring's `BeanFactory` or Hibernate's `LazyInitializer`, you will recognise the roles.
 
 `Candidate` changes as little as possible from stage to stage. It gains an annotation here, an interface there, an injected field near the end, and each change is announced. Everything that grows is the framework around it.
+
+== The book in one picture
+
+#figure(
+  cover-art(),
+  caption: [`Candidate` on a mirror. Above the line, the class as the compiler sees it; in the reflection, the private members lit up. The badges are the annotations of stage 03 waiting to be attached; the dashed cards behind are the generated classes of stages 04 and 07.],
+)
+
+Everything the next seventy pages do is in this drawing. Above the mirror, `Candidate` is a closed box: three private fields, a private constructor, a private method, and the compiler guarding every one of them. Below it, in the reflection, the same class with nothing hidden. Reflection, in the Java sense, is exactly the act of looking into that mirror, and the rest of the book is about what one can do once one has looked.
 
 == How the book and the code fit together
 

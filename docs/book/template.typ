@@ -82,6 +82,14 @@
   show table: set text(size: 9.5pt)
   show table: set par(justify: false)
 
+  // Figures
+  show figure.caption: it => block(width: 90%)[
+    #set text(font: head-font, size: 8.5pt, fill: luma(100))
+    #set par(justify: false)
+    #it
+  ]
+  set figure(gap: 0.8em)
+
   // Lists
   set list(indent: 1em, marker: text(fill: accent)[▪])
   set enum(indent: 1em)
@@ -91,15 +99,18 @@
     page(header: none, numbering: none, margin: 0pt)[
       #place(top + left)[#image(cover-image, width: 100%, height: 100%, fit: "cover")]
       // darken top and bottom a little so that white type stays legible
-      #place(top + left)[#rect(width: 100%, height: 42%, fill: gradient.linear(rgb("#0a1a2e").transparentize(25%), rgb("#0a1a2e").transparentize(100%), angle: 90deg), stroke: none)]
       #place(bottom + left)[#rect(width: 100%, height: 22%, fill: gradient.linear(rgb("#0a1a2e").transparentize(100%), rgb("#0a1a2e").transparentize(20%), angle: 90deg), stroke: none)]
-      #place(top + left, dx: 2.2cm, dy: 2.6cm)[
-        #set text(font: head-font, fill: white)
-        #text(size: 10pt, fill: white.transparentize(25%), tracking: 0.12em)[#upper(affiliation)]
-        #v(1.2cm)
-        #text(size: 44pt, weight: "bold")[#title]
-        #v(0.5cm)
-        #block(width: 14.5cm)[#text(size: 15pt, weight: "medium", fill: white.transparentize(10%))[#subtitle]]
+      // title on a translucent panel, so that it stays legible over the busy centre of the image
+      #place(top + left, dx: 1.6cm, dy: 2.0cm)[
+        #block(width: 14.6cm, radius: 8pt, inset: (x: 0.8cm, y: 0.7cm),
+               fill: rgb("#0a1a2e").transparentize(28%), stroke: 0.5pt + white.transparentize(75%))[
+          #set text(font: head-font, fill: white)
+          #text(size: 9.5pt, fill: white.transparentize(25%), tracking: 0.12em)[#upper(affiliation)]
+          #v(0.7cm)
+          #text(size: 40pt, weight: "bold")[#title]
+          #v(0.35cm)
+          #text(size: 13.5pt, weight: "medium", fill: white.transparentize(10%))[#subtitle]
+        ]
       ]
       #place(bottom + left, dx: 2.2cm, dy: -2.2cm)[
         #set text(font: head-font, fill: white)

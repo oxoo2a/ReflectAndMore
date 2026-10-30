@@ -16,9 +16,9 @@ else
 fi
 built=$(date +%Y-%m-%d)
 
-# ./build.sh            drawn cover (default)  -> docs/ReflectAndMore.pdf
-# ./build.sh image OUT  photographic cover      -> OUT (e.g. a preview outside the repository)
-cover="${1:-drawn}"
+# ./build.sh                 default cover (dalle image)              -> docs/ReflectAndMore.pdf
+# ./build.sh drawn [OUT]      cover: drawn | dalle | midjourney        -> OUT, default docs/ReflectAndMore.pdf
+cover="${1:-dalle}"
 out="${2:-../ReflectAndMore.pdf}"
 typst compile --root .. --input version="$version" --input built="$built" --input cover="$cover" book.typ "$out"
 echo "wrote $out  [cover: $cover, $version, built $built]"
