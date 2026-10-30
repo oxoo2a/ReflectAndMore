@@ -33,7 +33,7 @@ public final class Main {
 ```
 #src[stage00-plain/src/main/java/sa4e/reflect/Main.java]
 
-`Report` is a small helper that prints Markdown: a title, headings, `kv` for an expression and its result, `item` for bullet points. It is identical in every stage and has nothing to do with the material; think of it as `System.out.println` in a nicer suit. The output:
+`Report` is the Markdown printer from the introduction; `kv` prints an expression and its result, `item` a bullet point. The output:
 
 #results(
   ("a = new Candidate(7); a.f(3, -1.0)", "Candidate{x=3, label='candidate#7'}"),
