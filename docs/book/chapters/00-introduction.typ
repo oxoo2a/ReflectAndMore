@@ -77,7 +77,7 @@ That is all there is. Three constructors of three visibilities, a private field,
   caption: [`Candidate` on a mirror. Above the line, the class as the compiler sees it; in the reflection, the private members lit up. The badges are the annotations of stage 03 waiting to be attached; the dashed cards behind are the generated classes of stages 04 and 07.],
 )
 
-Everything the next seventy pages do is in this drawing. Above the mirror, `Candidate` is a closed box: three private fields, a private constructor, a private method, and the compiler guarding every one of them. Below it, in the reflection, the same class with nothing hidden. Reflection, in the Java sense, is exactly the act of looking into that mirror, and the rest of the book is about what one can do once one has looked.
+Everything the next seventy pages do is in this drawing, which is why it is also on the cover. Above the mirror, `Candidate` is a closed box: three private fields, a private constructor, a private method, and the compiler guarding every one of them. Below it, in the reflection, the same class with nothing hidden. Reflection, in the Java sense, is exactly the act of looking into that mirror, and the rest of the book is about what one can do once one has looked.
 
 == How the book and the code fit together
 

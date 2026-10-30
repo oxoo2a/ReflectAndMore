@@ -4,8 +4,15 @@
 // Set by build.sh from git: --input version=... --input built=...
 #let version = sys.inputs.at("version", default: "unversioned build")
 #let built = sys.inputs.at("built", default: "")
-// --input cover=midjourney | dalle uses an image from assets/, anything else the drawn cover art
-#let cover = sys.inputs.at("cover", default: "dalle")
+// --input cover=midjourney | dalle uses an image from assets/, anything else (default) the drawn cover art
+#let cover = sys.inputs.at("cover", default: "drawn")
+
+#let credits = if cover == "drawn" {
+  [The class-on-a-mirror illustration on the cover and in the introduction is drawn in Typst.]
+} else {
+  [Cover and back cover images generated with #if cover == "dalle" [DALL·E] else [Midjourney and DALL·E]
+   from prompts written for this book; the class-on-a-mirror drawing in the introduction is drawn in Typst.]
+}
 
 #show: book.with(
   title: "ReflectAndMore",
@@ -22,9 +29,7 @@
   colophon: [
     *ReflectAndMore* · written by Claude, inspired by a discussion with Peter Sturm \
     Software Architectures for Enterprises · Universität Trier · Winter term 2026/27 \
-    Typeset with Typst in Charter, Avenir Next and Source Code Pro. Cover and back cover images
-    generated with DALL·E from prompts written for this book; the class-on-a-mirror drawing in the
-    introduction is drawn in Typst. \
+    Typeset with Typst in Charter, Avenir Next and Source Code Pro. #credits \
     The code is in the repository next to this book: one folder per stage, `./run.sh NN` runs one. \
     #version#if built != "" [ · built #built]
   ],

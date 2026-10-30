@@ -119,7 +119,7 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--version", default="")
     ap.add_argument("--built", default="")
-    ap.add_argument("--cover", default=str(HERE / "assets" / "cover-dalle.png"))
+    ap.add_argument("--cover", required=True, help="cover image (build-epub.sh renders the title page)")
     args = ap.parse_args()
 
     doc = html.fromstring(Path(args.source).read_text(encoding="utf-8"))

@@ -147,8 +147,19 @@
 
   body
 
-  // Back cover: a full-bleed image with the colophon in a band at the bottom.
-  if back-image != none {
+  // Back cover: a full-bleed image with the colophon in a band at the bottom, or, without an
+  // image, a plain page with the colophon at the bottom.
+  if back-image == none and colophon != none {
+    pagebreak(weak: true)
+    page(header: none, numbering: none, margin: (top: 3.5cm, bottom: 2.5cm, x: 3cm))[
+      #v(1fr)
+      #line(length: 3cm, stroke: 0.6pt + luma(160))
+      #v(0.5cm)
+      #set text(font: head-font, size: 9pt, fill: luma(100))
+      #set par(leading: 0.6em)
+      #colophon
+    ]
+  } else if back-image != none {
     pagebreak(weak: true)
     page(header: none, numbering: none, margin: 0pt)[
       #place(top + left)[#image(back-image, width: 100%, height: 100%, fit: "cover")]

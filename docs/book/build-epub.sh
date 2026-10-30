@@ -10,10 +10,14 @@ dirty=$(git status --porcelain --untracked-files=no -- .. 2>/dev/null | grep -v 
 if [[ -n "$tag" ]]; then version="Version $tag (commit $commit$dirty)"; else version="Commit $commit$dirty"; fi
 built=$(date +%Y-%m-%d)
 out="${1:-../ReflectAndMore.epub}"
+cover="${2:-drawn}"   # drawn | dalle | midjourney, as in build.sh
 
 work=$(mktemp -d)
 typst compile --root .. --format svg figure.typ assets/figure-candidate.svg
+# the EPUB cover is the PDF's title page, rendered to a PNG
+typst compile --root .. --format png --ppi 150 --pages 1 --input version="$version" --input built="$built" \
+    --input cover="$cover" book.typ "$work/cover.png"
 typst compile --root .. --features html --format html --input version="$version" --input built="$built" \
     epub.typ "$work/book.html" 2> "$work/warnings.txt" || { cat "$work/warnings.txt"; exit 1; }
-python3 -I make_epub.py "$work/book.html" "$out" --version "$version" --built "$built"
+python3 -I make_epub.py "$work/book.html" "$out" --version "$version" --built "$built" --cover "$work/cover.png"
 rm -rf "$work"
