@@ -28,6 +28,7 @@
     <module>stage01-rtti</module>
     <module>stage02-reflection</module>
     <module>stage03-annotations</module>
+    <module>stage04-proxies</module>
   </modules>
 
   <build>

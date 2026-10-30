@@ -107,7 +107,7 @@ _Java 25+37-LTS-jvmci-b01, Java HotSpot(TM) 64-Bit Server VM (Oracle Corporation
 
 | Expression                                | Result                                       |
 |-------------------------------------------|----------------------------------------------|
-| `lambda.getClass().getName()`             | sa4e.reflect.Main$$Lambda/0x0000600001046660 |
+| `lambda.getClass().getName()`             | sa4e.reflect.Main$$Lambda/0x00007fff01046660 |
 | `lambda.getClass().isHidden()`            | true                                         |
 | `anonymous.getClass().getName()`          | sa4e.reflect.Main$2                          |
 | `anonymous.getClass().isAnonymousClass()` | true                                         |

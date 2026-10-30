@@ -25,7 +25,7 @@ two neighbouring folders is exactly one lecture step.
 | [stage01-rtti](stage01-rtti/) | What does the JVM know about `Candidate` at run time? | `Class` objects, hierarchy, `Class.forName`, sealed/record/enum introspection, erasure |
 | [stage02-reflection](stage02-reflection/) | Can a program read and operate `Candidate` without knowing it at compile time? | `Inspector` (XML description), `Invoker`, private access, encapsulation, `MethodHandle` |
 | [stage03-annotations](stage03-annotations/) | How does `Candidate` tell a framework something extra? | `@Comment`, target and retention, repeatable and inherited, a generic validator |
-| stage04-proxies | How do we add behaviour around `Candidate` without touching it? | `java.lang.reflect.Proxy`, interceptor chains, remote stub and skeleton |
+| [stage04-proxies](stage04-proxies/) | How do we add behaviour around `Candidate` without touching it? | `java.lang.reflect.Proxy`, interceptor chains, remote stub and skeleton |
 | stage05-loading | How does code arrive that did not exist at compile time? | configuration, `ServiceLoader`, run-time compiled plugin, class loaders and identity |
 | stage06-ioc | Who creates `Candidate` and fills its dependencies? | `@Inject`, `@Named`, `@Value`, `@PostConstruct`, container with classpath scanning, event bus |
 | stage07-codegen | What if the class itself is written at run time? | ClassFile API, generated subclass proxy, hidden classes |
