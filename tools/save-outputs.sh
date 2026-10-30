@@ -13,7 +13,7 @@ for dir in stage*/; do
   tmp=$(mktemp)
   ./run.sh "$stage" > "$tmp"
   if $check; then
-    filter() { grep -v -e '^_Java ' -e 'unnamed module @' -e 'Lambda/0x' -e 'ns per call' -e '^| direct call' -e '^| Method.invoke' -e '^| MethodHandle' "$1" || true; }
+    filter() { grep -v -e '^_Java ' -e 'unnamed module @' -e '/0x' -e 'reflect-generated' -e 'ns per call' -e '^| direct call' -e '^| Method.invoke' -e '^| MethodHandle' "$1" || true; }
     if ! diff -u <(filter "$stage/output.md") <(filter "$tmp") > /dev/null; then
       echo "DIFFERENT: $stage/output.md"
       diff -u <(filter "$stage/output.md") <(filter "$tmp") || true
