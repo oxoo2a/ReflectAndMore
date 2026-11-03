@@ -72,7 +72,7 @@ The last line is the one to remember: an annotation type is an _interface_, and 
 
 == Inspector lists annotations without knowing any
 
-Because members are methods, a tool can read an annotation it has never heard of. Stage 03's `Inspector` gets one new helper:
+Because members are methods, a tool can read an annotation it has never heard of. The `Inspector` from stage 02 writes its XML description of a class with the JDK's StAX writer; `startElement`, `emptyElement` and `newLine` are its small wrappers that add line breaks and indentation. In stage 03 it gets one new helper:
 
 ```java
 private void writeAnnotations(XMLStreamWriter xml, AnnotatedElement element)

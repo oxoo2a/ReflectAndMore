@@ -121,7 +121,7 @@ And note that `toString()` went through the handler too. The proxy class overrid
 
 == What the generated class looks like
 
-We have an `Inspector`. Let us point it at the proxy class:
+We have an `Inspector`, the class-describing tool from stage 02. Let us point it at the proxy class:
 
 ```xml
 <class name="jdk.proxy1.$Proxy0" modifiers="public final"
