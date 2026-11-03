@@ -67,6 +67,18 @@ well-formed and needed a side buffer to decide between `<field/>` and `<field>â€
 DOM plus `Transformer`, which indents but adds `standalone="no"` and a vendor-specific indent
 property; JAXB, Jackson or JDOM, which are not in the JDK.
 
+## XML rather than JSON
+
+The Inspector keeps emitting XML although JSON is the more common format today. Decided on
+2026-11-03. The JDK writes and parses XML (`java.xml`) but has no JSON API, so JSON would mean
+either hand-written string assembly, which the StAX decision above had just removed, or Jackson
+or Gson, which produce JSON by doing reflectively what the Inspector demonstrates by hand. XML
+also carries the story of stage 03: annotations replaced the external XML files in which
+framework metadata used to live. JSON's advantages, typed member values and arrays and the
+resemblance to GraalVM's reflection metadata, do not outweigh that. Students who want JSON get
+it with an XSLT stylesheet through `javax.xml.transform`; "emit JSON" stays an exercise. To be
+revisited if a JSON API lands in the JDK.
+
 ## READMEs and the book
 
 Each stage README follows the same rhythm: the pain in the previous stage, the mechanism, the new
