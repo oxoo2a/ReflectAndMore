@@ -31,6 +31,7 @@
     Software Architectures for Enterprises · Universität Trier · Winter term 2026/27 \
     Typeset with Typst in Charter, Avenir Next and Source Code Pro. #credits \
     The code is in the repository next to this book: one folder per stage, `./run.sh NN` runs one. \
+    © 2026 Peter Sturm · Text and figures: #link("https://creativecommons.org/licenses/by/4.0/")[CC BY 4.0] · Code: MIT license \
     #version#if built != "" [ · built #built]
   ],
 )

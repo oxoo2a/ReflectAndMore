@@ -89,6 +89,15 @@ also Figure 1 of the introduction. Image covers generated with DALL·E and Midjo
 written for the book were tried and are kept as alternatives (`docs/book/build.sh dalle` or
 `midjourney`), but the drawn version was preferred: less is more.
 
+## Licenses
+
+The code is under the MIT license, the book under CC BY 4.0, both with Peter Sturm as the
+rights holder. Two licenses because the book travels alone as PDF and EPUB: readers of teaching
+material expect Creative Commons terms, and MIT's wording is about software. CC BY rather than
+BY-SA or BY-NC so that other courses, including paid programmes, can adapt the material with
+nothing but attribution. The notice is in the colophon on the back cover and in the EPUB
+metadata, so that it stays with the book outside the repository.
+
 ## Hosting
 
 The repository lives on a self-hosted Forgejo instance (remote `deethou`), which is the

@@ -25,6 +25,7 @@ SUBTITLE = "A field guide to Java meta-programming, or: how enterprise framework
 AUTHOR = "Claude"
 AFFILIATION = "Software Architectures for Enterprises · Universität Trier"
 DATE_LINE = "Inspired by a discussion with Peter Sturm · Winter term 2026/27"
+RIGHTS = "© 2026 Peter Sturm. Text and figures CC BY 4.0 (creativecommons.org/licenses/by/4.0), code MIT."
 
 CSS = """
 html { font-size: 100%; }
@@ -192,7 +193,7 @@ def main():
     manifest.insert(1, ("cover", "cover.xhtml", "application/xhtml+xml", None))
 
     # title page
-    meta_lines = [DATE_LINE] + ([f"{args.version} · built {args.built}" if args.built else args.version] if args.version else [])
+    meta_lines = [DATE_LINE] + ([f"{args.version} · built {args.built}" if args.built else args.version] if args.version else []) + [RIGHTS]
     tp = html.fromstring(
         '<div class="titlepage"><p class="affiliation">%s</p><h1>%s</h1><p class="subtitle">%s</p>'
         '<p class="author">%s</p>%s</div>' % (
@@ -240,6 +241,7 @@ def main():
     <dc:language>en</dc:language>
     <dc:description>{etree_escape(SUBTITLE)}</dc:description>
     <dc:publisher>{etree_escape(AFFILIATION)}</dc:publisher>
+    <dc:rights>{etree_escape(RIGHTS)}</dc:rights>
     <meta property="dcterms:modified">{modified}</meta>
     <meta name="cover" content="cover-image"/>
   </metadata>

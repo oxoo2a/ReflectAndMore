@@ -90,4 +90,7 @@ The reasons behind the layout, the naming and the Markdown output are recorded i
 
 ## License
 
-[MIT](LICENSE).
+The code is licensed under the [MIT license](LICENSE). The book (`docs/book/`, the PDF and the
+EPUB), its text and figures, is licensed under
+[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+(CC BY 4.0). © 2026 Peter Sturm.
