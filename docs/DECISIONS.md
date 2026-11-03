@@ -91,7 +91,10 @@ written for the book were tried and are kept as alternatives (`docs/book/build.s
 
 ## Hosting
 
-The repository lives on a self-hosted Forgejo instance (remote `deethou`) and is private for now.
+The repository lives on a self-hosted Forgejo instance (remote `deethou`), which is the
+canonical copy, and is published on GitHub under Peter Sturm's personal account
+(remote `github`, https://github.com/oxoo2a/ReflectAndMore) since 2026-11-03. Both remotes
+receive every push.
 A public GitHub mirror for students may be added later.
 
 ## Possible next steps
