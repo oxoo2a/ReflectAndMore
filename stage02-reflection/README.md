@@ -14,7 +14,8 @@ Every member of a class is itself an object that can be listed, inspected and us
 `Main` walks through:
 
 1. `Inspector`: an XML description of any class (the TalkAbout example from the slides),
-   and the difference between `getDeclaredMethods()` and `getMethods()`
+   written with the JDK's StAX writer, and the difference between `getDeclaredMethods()`
+   and `getMethods()`
 2. parameter names, which exist only because the project compiles with `-parameters`
 3. creating objects by name, through public and private constructors
 4. calling public, private and static methods; how exceptions are wrapped
@@ -28,7 +29,7 @@ Every member of a class is itself an object that can be listed, inspected and us
 
 | File | Purpose |
 |---|---|
-| `Inspector.java` | XML description of a class from its declared constructors, fields and methods |
+| `Inspector.java` | XML description of a class from its declared constructors, fields and methods, written element by element with `javax.xml.stream.XMLStreamWriter` |
 | `Invoker.java` | `newInstance`, `call`, `get`, `set` by name, with argument-based member selection |
 
 `Candidate.java` is unchanged. `Special` and `Variant` stay because `Main` uses them;

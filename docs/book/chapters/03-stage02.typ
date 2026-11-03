@@ -19,58 +19,92 @@ public final class Inspector {
     public Inspector(Class<?> target) { this.target = target; }
 
     public String describe() {
-        StringBuilder xml = new StringBuilder();
-        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xml.append("<class name=\"").append(target.getName())
-           .append("\" modifiers=\"").append(Modifier.toString(target.getModifiers()))
-           .append("\" superclass=\"").append(target.getSuperclass().getName())
-           .append("\">\n");
+        StringWriter text = new StringWriter();
+        try {
+            XMLStreamWriter xml = XMLOutputFactory.newDefaultFactory()
+                                                  .createXMLStreamWriter(text);
+            xml.writeStartDocument("UTF-8", "1.0");
+            startElement(xml, "class");
+            xml.writeAttribute("name", target.getName());
+            xml.writeAttribute("modifiers", Modifier.toString(target.getModifiers()));
+            xml.writeAttribute("superclass", target.getSuperclass().getName());
 
-        // The reflection API makes no promise about the order of members, so sort.
-        Constructor<?>[] constructors = target.getDeclaredConstructors();
-        Arrays.sort(constructors, Comparator.comparing(Constructor::toGenericString));
-        for (Constructor<?> ctor : constructors) {
-            xml.append("  <constructor modifiers=\"")
-               .append(Modifier.toString(ctor.getModifiers())).append("\">\n");
-            appendParameters(xml, ctor);
-            xml.append("  </constructor>\n");
-        }
+            // The reflection API makes no promise about the order of members, so sort.
+            Constructor<?>[] constructors = target.getDeclaredConstructors();
+            Arrays.sort(constructors,
+                        Comparator.comparing(Constructor::toGenericString));
+            for (Constructor<?> ctor : constructors) {
+                startElement(xml, "constructor");
+                xml.writeAttribute("modifiers", Modifier.toString(ctor.getModifiers()));
+                writeParameters(xml, ctor);
+                endElement(xml);
+            }
 
-        Field[] fields = target.getDeclaredFields();
-        Arrays.sort(fields, Comparator.comparing(Field::getName));
-        for (Field f : fields) {
-            xml.append("  <field name=\"").append(f.getName())
-               .append("\" type=\"").append(f.getType().getName())
-               .append("\" modifiers=\"").append(Modifier.toString(f.getModifiers()))
-               .append("\"/>\n");
-        }
+            Field[] fields = target.getDeclaredFields();
+            Arrays.sort(fields, Comparator.comparing(Field::getName));
+            for (Field f : fields) {
+                emptyElement(xml, "field");
+                xml.writeAttribute("name", f.getName());
+                xml.writeAttribute("type", f.getType().getName());
+                xml.writeAttribute("modifiers", Modifier.toString(f.getModifiers()));
+            }
 
-        Method[] methods = target.getDeclaredMethods();
-        Arrays.sort(methods, Comparator.comparing(Method::getName));
-        for (Method m : methods) {
-            if (m.isSynthetic()) continue;        // compiler-generated helpers
-            xml.append("  <method name=\"").append(m.getName())
-               .append("\" modifiers=\"").append(Modifier.toString(m.getModifiers()))
-               .append("\" returns=\"").append(m.getReturnType().getName()).append("\">\n");
-            appendParameters(xml, m);
-            xml.append("  </method>\n");
+            Method[] methods = target.getDeclaredMethods();
+            Arrays.sort(methods, Comparator.comparing(Method::getName));
+            for (Method m : methods) {
+                if (m.isSynthetic()) continue;        // compiler-generated helpers
+                startElement(xml, "method");
+                xml.writeAttribute("name", m.getName());
+                xml.writeAttribute("modifiers", Modifier.toString(m.getModifiers()));
+                xml.writeAttribute("returns", m.getReturnType().getName());
+                writeParameters(xml, m);
+                endElement(xml);
+            }
+            endElement(xml);                          // </class>
+            xml.writeEndDocument();
+            xml.close();
+        } catch (XMLStreamException e) {
+            throw new IllegalStateException("cannot write XML", e);
         }
-        xml.append("</class>\n");
-        return xml.toString();
+        return text.toString();
     }
 
     /** Constructors and methods share the type Executable: parameters handled once. */
-    private static void appendParameters(StringBuilder xml, Executable executable) {
+    private static void writeParameters(XMLStreamWriter xml, Executable executable)
+            throws XMLStreamException {
         for (Parameter p : executable.getParameters()) {
-            xml.append("    <parameter name=\"").append(p.getName())
-               .append("\" type=\"").append(p.getType().getName()).append("\"/>\n");
+            emptyElement(xml, "parameter");
+            xml.writeAttribute("name", p.getName());
+            xml.writeAttribute("type", p.getType().getName());
         }
     }
+
+    // Each element on its own line, indented by nesting depth: insignificant whitespace.
+    private int depth;
+
+    private void startElement(XMLStreamWriter xml, String name) throws XMLStreamException {
+        newLine(xml);
+        xml.writeStartElement(name);
+        depth++;
+    }
+
+    private void endElement(XMLStreamWriter xml) throws XMLStreamException {
+        depth--;
+        newLine(xml);
+        xml.writeEndElement();
+    }
+
+    private void newLine(XMLStreamWriter xml) throws XMLStreamException {
+        xml.writeCharacters("\n" + "  ".repeat(depth));
+    }
+    // emptyElement: newLine, then writeEmptyElement
 }
 ```
 #src[stage02-reflection/src/main/java/sa4e/reflect/Inspector.java (abridged)]
 
-Three families of calls do all the work: `getDeclaredConstructors()`, `getDeclaredFields()` and `getDeclaredMethods()`. Each returns an array of member objects, and each member object can tell its name, its modifiers as a bit mask that `Modifier.toString` turns into `private static final`, and its types. Constructors and methods share a superclass, `Executable`, so parameters are handled once for both. Applied to `Candidate`, the result is:
+Three families of calls do all the work: `getDeclaredConstructors()`, `getDeclaredFields()` and `getDeclaredMethods()`. Each returns an array of member objects, and each member object can tell its name, its modifiers as a bit mask that `Modifier.toString` turns into `private static final`, and its types. Constructors and methods share a superclass, `Executable`, so parameters are handled once for both.
+
+The XML itself is not glued together from strings. The JDK ships a streaming XML writer, `javax.xml.stream.XMLStreamWriter` from the StAX API in module `java.xml`, and `Inspector` dictates the document to it element by element: open an element, add its attributes, write what is inside, close it. The writer escapes attribute values and text and remembers which elements are open, so the output is well-formed by construction and `Inspector` never has to think about quotes, angle brackets or closing tags. Whitespace between elements means nothing in XML; the small helpers at the end add a line break and two spaces per nesting level before each element, so that the result can be read by people as well as parsers. Applied to `Candidate`, the result is:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

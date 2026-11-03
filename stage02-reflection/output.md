@@ -90,7 +90,7 @@ _Java 25+37-LTS-jvmci-b01, Java HotSpot(TM) 64-Bit Server VM (Oracle Corporation
 | Expression                               | Result                                                                                                                                                                            |
 |------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `String.class.getDeclaredField("value")` | private final byte[] java.lang.String.value (reading metadata always works)                                                                                                       |
-| `stringValue.setAccessible(true)`        | InaccessibleObjectException: Unable to make field private final byte[] java.lang.String.value accessible: module java.base does not "opens java.lang" to unnamed module @5b6f7412 |
+| `stringValue.setAccessible(true)`        | InaccessibleObjectException: Unable to make field private final byte[] java.lang.String.value accessible: module java.base does not "opens java.lang" to unnamed module @49c2faae |
 
 > ℹ java.base does not 'open' java.lang to us. Start the JVM with --add-opens java.base/java.lang=ALL-UNNAMED to allow it. Many frameworks needed exactly such flags when Java 16 closed the door.
 
@@ -120,8 +120,8 @@ _Java 25+37-LTS-jvmci-b01, Java HotSpot(TM) 64-Bit Server VM (Oracle Corporation
 
 | Call style               | ns per call |
 |--------------------------|-------------|
-| direct call              | 0.38        |
-| Method.invoke            | 6.37        |
-| MethodHandle.invokeExact | 2.40        |
+| direct call              | 0.36        |
+| Method.invoke            | 6.40        |
+| MethodHandle.invokeExact | 2.43        |
 
 > ℹ Numbers are indicative only (no proper benchmark harness). Since Java 18 Method.invoke is itself built on method handles (JEP 416); after warm-up the JIT removes most of the overhead for both.

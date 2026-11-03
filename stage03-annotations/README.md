@@ -36,7 +36,8 @@ compiler and, with `RUNTIME` retention, readable through reflection.
 | `CandidateTests.java` | tests for `Candidate`, one failing on purpose |
 
 Changed: `Candidate.java` carries `@Comment`, `@Marker`, `@NotNull` and `@Range` now; its
-behaviour is untouched. `Inspector.java` prints annotations. `Invoker` from stage 02 is no
+behaviour is untouched. `Inspector.java` prints annotations, with the
+annotation member values as element text (the StAX writer escapes them). `Invoker` from stage 02 is no
 longer used and was dropped.
 
 ## In the real world

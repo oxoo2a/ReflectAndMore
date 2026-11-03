@@ -53,6 +53,20 @@ results readable on the forge without running anything and doubles as a regressi
 vary between runs (Java version line, benchmark timings, object addresses, hidden-class suffixes,
 temporary paths).
 
+## XML through StAX, not string concatenation
+
+The `Inspector` of stages 02 to 04 writes its XML with the JDK's streaming writer
+(`javax.xml.stream.XMLStreamWriter`, module `java.xml`), element by element. The writer escapes
+attribute values and text and tracks the open elements, so the document is well-formed by
+construction and the annotation values of stage 03 need no hand-written escaping. StAX does not
+indent; three small helpers that wrap the start, empty and end element calls add a line break
+and two spaces per nesting level, so the output stays readable without a pretty-printer.
+
+Rejected: building the XML in a `StringBuilder` (the original version), which only hoped to be
+well-formed and needed a side buffer to decide between `<field/>` and `<field>…</field>`;
+DOM plus `Transformer`, which indents but adds `standalone="no"` and a vendor-specific indent
+property; JAXB, Jackson or JDOM, which are not in the JDK.
+
 ## READMEs and the book
 
 Each stage README follows the same rhythm: the pain in the previous stage, the mechanism, the new

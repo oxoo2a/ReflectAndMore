@@ -75,27 +75,32 @@ The last line is the one to remember: an annotation type is an _interface_, and 
 Because members are methods, a tool can read an annotation it has never heard of. Stage 03's `Inspector` gets one new helper:
 
 ```java
-private static void appendAnnotations(StringBuilder xml, AnnotatedElement element,
-                                      String indent) {
+private void writeAnnotations(XMLStreamWriter xml, AnnotatedElement element)
+        throws XMLStreamException {
     for (Annotation a : element.getAnnotations()) {
         Class<? extends Annotation> type = a.annotationType();
         Method[] members = type.getDeclaredMethods();
         Arrays.sort(members, Comparator.comparing(Method::getName));
-        xml.append(indent).append("<annotation type=\"")
-           .append(type.getName()).append("\"");
-        if (members.length == 0) { xml.append("/>\n"); continue; }
-        xml.append(">\n");
-        for (Method member : members) {
-            Object value = member.invoke(a);          // read the member reflectively
-            xml.append(indent).append("  <member name=\"").append(member.getName())
-               .append("\">").append(escape(value)).append("</member>\n");
+        if (members.length == 0) {
+            emptyElement(xml, "annotation");
+            xml.writeAttribute("type", type.getName());
+            continue;
         }
-        xml.append(indent).append("</annotation>\n");
+        startElement(xml, "annotation");
+        xml.writeAttribute("type", type.getName());
+        for (Method member : members) {
+            newLine(xml);
+            xml.writeStartElement("member");
+            xml.writeAttribute("name", member.getName());
+            xml.writeCharacters(String.valueOf(member.invoke(a)));  // read reflectively
+            xml.writeEndElement();
+        }
+        endElement(xml);
     }
 }
 ```
 
-`Inspector` imports neither `Comment` nor `Range` nor `NotNull`. It asks the element for its annotations, asks each annotation for its type, asks the type for its methods, and _invokes_ those methods on the annotation instance with the `Method.invoke` of stage 02. The output for `Candidate` now contains, for example:
+`Inspector` imports neither `Comment` nor `Range` nor `NotNull`. It asks the element for its annotations, asks each annotation for its type, asks the type for its methods, and _invokes_ those methods on the annotation instance with the `Method.invoke` of stage 02. The member's value goes out as text, and the StAX writer escapes it, whatever a comment string may contain. The output for `Candidate` now contains, for example:
 
 ```xml
   <field name="x" type="int" modifiers="private">
