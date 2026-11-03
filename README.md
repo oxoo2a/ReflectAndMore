@@ -87,3 +87,7 @@ The reasons behind the layout, the naming and the Markdown output are recorded i
   the material.
 - `Candidate` changes only when the next mechanism needs it (an interface, an annotation, an
   injected field). Everything that grows is the framework around it.
+
+## License
+
+[MIT](LICENSE).
